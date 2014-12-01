@@ -1,0 +1,25 @@
+/* For creating External Table*/
+CREATE EXTERNAL TABLE AppLogger(
+  Date STRING,
+  Time STRING,
+  Log_Lavel STRING,
+  Class_Name STRING, 
+  Method_Name STRING,
+  App_Name STRING,
+  Release_Version STRING,
+  Event_Message STRING,
+  Event_Parameters STRING
+  )
+PARTITIONED BY (Dt STRING)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
+WITH SERDEPROPERTIES (
+  "input.regex" = "([0-9-]+)\\s*([0-9:]+)\\s*([A-Za-z]+)\\s*~\\s*classname=([^,]*),\\s*method=([^,]*),\\s+([^=]*)=([^,]*),([^,]*),?\\s*[params=]*(.*)?",
+  "output.format.string" = "%1$s %2$s %3$s %4$s %5$s %6$s %7$s %8$s %9$s"
+) 
+LOCATION '/user/basak/play-log';
+
+/* For creating partition for each day */
+ALTER TABLE AppLogger ADD IF NOT EXISTS PARTITION (Dt = "14-11-30") LOCATION "/user/basak/play-log/14-11-30";
+
+/* For granting access to query from application */
+grant SELECT on table applogger to user hue;
