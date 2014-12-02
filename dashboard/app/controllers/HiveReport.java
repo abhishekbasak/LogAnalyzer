@@ -43,4 +43,28 @@ public class HiveReport extends Application {
 		
 		render(categories,studentCount);
 	}
+	
+	public static void dashboard() {
+		Map<String, Double> hourlyCountMap = AppLogger.getHourlyCount(null);
+		
+		String studentCount = "";
+		String categories = "";
+		if (hourlyCountMap != null && !hourlyCountMap.isEmpty()) {
+			for (Entry<String, Double> entry : hourlyCountMap.entrySet()) {
+				if ("".equals(categories)) {
+					categories += entry.getKey();
+				} else {
+					categories += "," + entry.getKey();
+				}
+				
+				if ("".equals(studentCount)) {
+					studentCount += entry.getValue();
+				} else {
+					studentCount += "," + entry.getValue();
+				}
+			}
+		}
+		
+		render(categories,studentCount);
+	}
 }
