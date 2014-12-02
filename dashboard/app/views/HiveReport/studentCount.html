@@ -1,0 +1,62 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(document).ready(function(){
+	var studentCount = '${studentCount}';
+	var categories = '${categories}';
+	//alert(abc);
+	//var abc = [];
+	var studentCountFinal = [];
+	var studentCountArray = studentCount.split(',');
+	$.each(studentCountArray, function(index, value) { 
+	    //alert(index + ': ' + value);   // alerts 0:[1 ,  and  1:2]
+	    studentCountFinal[index] = parseInt(value);
+	});
+	var categoriesFinal = [];
+	var categoriesArray = categories.split(',');
+	$.each(categoriesArray, function(index, value) { 
+	    //alert(index + ': ' + value);   // alerts 0:[1 ,  and  1:2]
+	    categoriesFinal[index] = parseInt(value);
+	});
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Test Started By Hour Today'
+        },
+        xAxis: {
+            categories: categoriesFinal
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Count'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '</tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.1,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: '24hr Format',
+            data: studentCountFinal,
+            align: 'right'
+
+        }]
+    });
+});
+</script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
