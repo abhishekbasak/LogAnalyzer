@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -45,7 +46,8 @@ public class HiveReport extends Application {
 	}
 	
 	public static void dashboard() {
-		Map<String, Double> hourlyCountMap = AppLogger.getHourlyCount(null);
+		Date currentDate = null;
+		Map<String, Double> hourlyCountMap = AppLogger.getHourlyCount(currentDate);
 		
 		String studentCount = "";
 		String categories = "";

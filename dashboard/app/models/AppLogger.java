@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,15 +14,18 @@ import utils.Constants;
 public class AppLogger {
 
 
-	public static Map<String, Double> getHourlyCount(String currentDate) {
+	public static Map<String, Double> getHourlyCount(Date currentDate) {
 		Map<String, Double> hourlyCountMap = new LinkedHashMap<String, Double>();
 		
 		try {
 			String query = null;
-			if (currentDate == null) {
-				query = "SELECT HOUR(time) hour, COUNT(1) cnt FROM APPLOGGER WHERE event_message like '%Test Started%' GROUP BY HOUR(time) Order By hour";
-			} else {
-				
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+			if (currentDate == null) { // For current date
+				String dateStr = sdf.format(new Date());
+				query = "SELECT HOUR(time) hour, COUNT(1) cnt FROM APPLOGGER WHERE event_message like '%Test Started%' and date = '" + dateStr + "' GROUP BY HOUR(time) Order By hour";
+			} else { // For requested date
+				String dateStr = sdf.format(currentDate);
+				query = "SELECT HOUR(time) hour, COUNT(1) cnt FROM APPLOGGER WHERE event_message like '%Test Started%' and date = '" + dateStr + "' GROUP BY HOUR(time) Order By hour";
 			}
 			
 			ResultSet rs = getResult(query);
